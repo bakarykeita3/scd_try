@@ -1,1 +1,41 @@
-Je traite le problème de la diffusion de la chaleur en 1D.
+program tab_initialization
+    implicit none
+    integer :: T(20)
+    integer :: i
+
+    ! Remplissage du tableau
+    do i = 1, 20
+        T(i) = (i + 2)**2
+    end do
+
+    ! ---------- CSV ----------
+    open(unit=10, file="tab.csv", status="replace", action="write")
+    write(10, '(A)') "i,T(i)"   ! en-tête CSV
+
+    do i = 1, 20
+        write(10, '(I3,",",I6)') i, T(i)
+    end do
+    close(10)
+
+    ! ---------- LaTeX ----------
+    open(unit=20, file="tab.tex", status="replace", action="write")
+
+    write(20, '(A)') '\begin{table}[h]'
+    write(20, '(A)') '\centering'
+    write(20, '(A)') '\begin{tabular}{c c}'
+    write(20, '(A)') '\hline'
+    write(20, '(A)') 'i & T(i) \\'
+    write(20, '(A)') '\hline'
+
+    do i = 1, 20
+        write(20, '(I3," & ",I6," \\")') i, T(i)
+    end do
+
+    write(20, '(A)') '\hline'
+    write(20, '(A)') '\end{tabular}'
+    write(20, '(A)') '\caption{Tableau des valeurs de T(i)}'
+    write(20, '(A)') '\end{table}'
+
+    close(20)
+
+end program tab_initialization
